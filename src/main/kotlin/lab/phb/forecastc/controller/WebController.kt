@@ -2,6 +2,7 @@ package lab.phb.forecastc.controller
 
 import lab.phb.forecastc.model.Parameter
 import lab.phb.forecastc.repo.RekapPerTanggalRepo
+import lab.phb.forecastc.util.ExponentialSmoothing
 import lab.phb.forecastc.util.LeastSquare
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,7 +31,9 @@ class WebController {
         log.info(param.tglAkhir)
         var data = repo.findByTglBetween(param.tglAwal, param.tglAkhir)
         var result = LeastSquare.calculate(data)
+        var resultES = ExponentialSmoothing.getForecast(data)
         model.addAttribute("hasil", result)
+        model.addAttribute("hasilES", resultES)
         return "result"
     }
 
